@@ -100,11 +100,10 @@ func sendAudio(conn *websocket.Conn, recognizeOptions *RecognizeUsingWebsocketOp
 	for {
 		bytesRead, err := (*recognizeOptions.Audio).Read(chunk)
 		if err != nil {
-			if err == io.EOF {
-				break
-			} else {
+			if err != io.EOF {
 				recognizeListener.OnError(err)
 			}
+			break
 		}
 		err = conn.WriteMessage(websocket.BinaryMessage, chunk[:bytesRead])
 		if err != nil {
